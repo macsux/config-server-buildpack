@@ -4,7 +4,7 @@ This project offers a way to expose configuring from Spring Cloud Config Server 
 
 - Create Config server instance and bind it your your app
 
-- Apply as supply buildpack in your manifest. Edit the `SPRING__APPLICATION__NAME` environmental variable to map it to the name of the app in config server
+- Apply as supply buildpack in your manifest. 
 
   ```yaml
   ---
@@ -15,6 +15,14 @@ This project offers a way to expose configuring from Spring Cloud Config Server 
     - nodejs_buildpack
     env:
       SPRING__APPLICATION__NAME: myapp
+      ASPNETCORE_ENVIRONMENT: profile-name
+      SPRING__CLOUD___CONFIG__LABEL: label-name
   ```
+
+Edit the env vars above:
+
+* `SPRING__APPLICATION__NAME` - name of the app in config server
+* `ASPNETCORE_ENVIRONMENT` - (optional) profile name
+* `ASPNETCORE_ENVIRONMENT` - (optional) label name
 
 Environmental variables will be available to your app as both individual values mapped to the path AND a single JSON block available in `CONFIG_SERVER_APP_JSON` environmental variable. During app startup the buildpack will print out all variables it creates (without values).
