@@ -103,29 +103,39 @@ namespace ConfigServerBuildpack
                     File.WriteAllText(Path.Combine(profiled,$"{startupScriptName}.bat"),$@"%DEPS_DIR%\{index}\{prestartCommand} {index}");
                 }
                 InstallStartupEnvVars(profiled, index, false);
+                GetEnvScriptFile(profiled, index, true); // causes empty env file to be created so it can (potentially) be populated with vars during onstart hook
             }
             
         }
-
+        private string GetEnvScriptFile(string profiled, int index, bool isPreStart)
+        {
+            var prefix = isPreStart ? "z" : string.Empty;
+            var suffix = IsLinux ? ".sh" : ".bat";
+            var envScriptName = Path.Combine(profiled, $"{prefix}{index:00}_{nameof(ConfigServerBuildpack)}_env{suffix}");
+            // ensure it's initialized
+            if(!File.Exists(envScriptName))
+                File.WriteAllText(envScriptName, string.Empty);
+            return envScriptName;
+        }
         protected void InstallStartupEnvVars(string profiled, int index, bool isPreStart)
         {
-
+            var envScriptName = GetEnvScriptFile(profiled, index, isPreStart);
+            
             if (EnvironmentalVariables.Any())
             {
-                // if env vars are installed as part of prestart script itself, give them a prefix so they go at the end of profile.d folder (higher priority)
-                var prefix = isPreStart ? "z" : string.Empty; 
-                var envScriptName = $"{prefix}{index:00}_{nameof(ConfigServerBuildpack)}_env";
                 if (IsLinux)
                 {
-                    var envVars = EnvironmentalVariables.Aggregate(new StringBuilder(), (sb,x) => sb.Append($"export {x.Key}={x.Value}\n"));
-                    File.WriteAllText(Path.Combine(profiled,$"{envScriptName}.sh"), $"#!/bin/bash\n{envVars}");
+                    var envVars = EnvironmentalVariables.Aggregate(new StringBuilder(), (sb,x) => sb.Append($"export {x.Key}={Escape(x.Value)}\n"));
+                    File.WriteAllText(envScriptName, $"#!/bin/bash\n{envVars}");
                 }
                 else
                 {
                     var envVars = EnvironmentalVariables.Aggregate(new StringBuilder(), (sb,x) => sb.Append($"SET {x.Key}={x.Value}\r\n"));
-                    File.WriteAllText(Path.Combine(profiled,$"{envScriptName}.bat"),envVars.ToString());
+                    File.WriteAllText(envScriptName,envVars.ToString());
                 }
             }
         }
+
+        private static string Escape(string value) => $"\"{value.Replace("\"", "\\\"")}\"";
     }
 }
