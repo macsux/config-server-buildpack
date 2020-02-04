@@ -1,0 +1,16 @@
+{
+  "name": "env-printer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
+  },
+  "license": "MIT",
+  "dependencies": {
+
+  },
+  "engines": {
+    "node": "10.x"
+  }
+}

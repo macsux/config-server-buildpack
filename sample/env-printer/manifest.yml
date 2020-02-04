@@ -1,0 +1,11 @@
+---
+applications:
+- name: env-printer
+  random-route: true
+  buildpacks:
+  - https://github.com/macsux/config-server-buildpack/releases/download/v0.1.0/ConfigServerBuildpack-linux-x64-0.1.0.zip
+  - nodejs_buildpack
+  services:
+  - config-server
+  env:
+    SPRING__APPLICATION__NAME: lightside
