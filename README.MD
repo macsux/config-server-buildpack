@@ -27,4 +27,6 @@ Edit the env vars above:
 * `SPRING__CLOUD__CONFIG__ENV` - (optional) profile name
 * `SPRING__CLOUD__CONFIG__LABEL` - (optional) label name
 
+**Attention: Note the double underscore in environmental variables**
+
 Environmental variables will be available to your app as both individual values mapped to the path AND a single JSON block available in `CONFIG_SERVER_APP_JSON` environmental variable. During app startup the buildpack will print out all variables it creates (without values).
