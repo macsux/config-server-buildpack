@@ -1,0 +1,12 @@
+---
+applications:
+- name: env-printer-windows
+  random-route: true
+  stack: windows
+  buildpacks:
+  - https://github.com/macsux/config-server-buildpack/releases/download/v0.1.0/ConfigServerBuildpack-win-x64-0.1.0.zip
+  - hwc_buildpack
+  services:
+  - config-server
+  env:
+    SPRING__APPLICATION__NAME: lightside

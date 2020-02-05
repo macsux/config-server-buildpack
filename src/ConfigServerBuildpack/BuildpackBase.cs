@@ -68,6 +68,8 @@ namespace ConfigServerBuildpack
         private void DoPreStartup(int index)
         {
             var appHome = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                appHome = Path.Combine(appHome, "app");
             PreStartup(appHome, Environment.GetEnvironmentVariable("DEPS_DIR"), index);
             var profiled = Path.Combine(appHome, ".profile.d");
             InstallStartupEnvVars(profiled, index, true);
