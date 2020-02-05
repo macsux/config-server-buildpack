@@ -4,7 +4,7 @@ This project offers a way to expose configuring from Spring Cloud Config Server 
 
 - Create Config server instance and bind it your your app
 
-- Apply as supply buildpack in your manifest. 
+- Apply as supply buildpack in your manifest:
 
   ```yaml
   ---
@@ -18,6 +18,8 @@ This project offers a way to expose configuring from Spring Cloud Config Server 
       SPRING__CLOUD__CONFIG__ENV: profile-name
       SPRING__CLOUD__CONFIG__LABEL: label-name
   ```
+
+(Note if targeting windows, make sure to substitute above buildpack URL with appropriate windows based release. Get latest compiled buildpack binary URL on GitHub releases page)
 
 Edit the env vars above:
 
